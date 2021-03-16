@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+$( function() {
+    {%for key,value in table.iterrows() %}
+      {%for a in value['listvalues'] %}
+        $("#radius{{value['galery']}}{{loop.index}}").val("{{value['galery']}}").change();
+        $("#radius{{value['galery']}}{{loop.index}}").parent().hide();
+      {%endfor%}
+    {%endfor%}
+    
+    $( "#target" ).click(function() {
+     alert( "Handler for .click() called." );
+    {%for key,value in table.iterrows() %}
+      {%for a in value['listvalues'] %}
+        $("#radius{{value['galery']}}{{loop.index}}").parent().show();
+      {%endfor%}
+    {%endfor%}
+    }); 
+} );
+      
+</script>
+
+
+</head>
+<body>
+
+<h2>Galeria de productos fabricados en madera</h2>
+
+<table style="width:100%">
+{% set ns = namespace(count=0) %}   
+     {%for key,value in table.iterrows() %}
+     <tr>
+        <td>
+        {{value['galery']}}
+        </td>
+        <tr>
+        {%for a in value['listvalues'] %}
+          {%if ns.count <= 3 %}
+            {%if ns.count == 0 %}
+              <tr>
+            {%endif%} 
+            <td> 
+            <script>
+              $( function() {
+                $( "#radius{{value['galery']}}{{loop.index}}" ).selectmenu({
+                  change: function( event, data ) {
+                    $.getJSON("{{url_for('set_galery')}}",{
+                        valor: $("#radius{{value['galery']}}{{loop.index}}" ).val(),
+                        index: {{loop.index}},
+                        path: "{{a}}",
+                     }, function(data) {
+                        response(data.matching_results); // matching_results from jsonify
+                     });
+                     location.reload();
+                  }
+                 });
+              } );
+            </script> 
+            <div>
+    		<a href="{{a|replace('_thumbnail.jpg', '.jpg')}}"><img src="{{a}}" width="300" height="200"></a>
+    		<div>
+                    <select  id="radius{{value['galery']}}{{loop.index}}">
+                      <option value="insectos">Insectos</option>
+                      <option value="vehiculos">Vehiculos</option>
+                      <option value="none">None</option>
+                      <option value="animales">Animales</option>
+                      <option value="varios">Varios</option>
+                      <option value="eliminado">Eliminado</option>
+                    </select>
+            </div>
+            </td>
+            {% set ns.count = ns.count + 1 %} 
+          {% else %}
+               {% set ns.count = 0 %}
+            <td> 
+            <script>
+              $( function() {
+                $( "#radius{{value['galery']}}{{loop.index}}" ).selectmenu({
+                  change: function( event, data ) {
+                    $.getJSON("{{url_for('set_galery')}}",{
+                        valor: $("#radius{{value['galery']}}{{loop.index}}" ).val(),
+                        index: {{loop.index}},
+                        path: "{{a}}",
+                     }, function(data) {
+                        response(data.matching_results); // matching_results from jsonify
+                     });
+                     location.reload();
+                  }
+                 });
+              } );
+            </script>
+            <div> 
+    		<a href="{{a|replace('_thumbnail.jpg', '.jpg')}}"><img src="{{a}}" width="300" height="200"></a>
+    		<div> 
+                    <select  id="radius{{value['galery']}}{{loop.index}}">
+                      <option value="insectos">Insectos</option>
+                      <option value="vehiculos">Vehiculos</option>
+                      <option value="none">None</option>
+                      <option value="animales">Animales</option>
+                      <option value="varios">Varios</option>
+                      <option value="eliminado">Eliminado</option>
+                    </select>
+            </div>
+            </td>
+            </tr>
+          {%endif%}
+        {%endfor%}
+       </tr> 
+     {%endfor%}
+</table>
+<div id="target">
+  Click here
+</div>
+
+<script>
+
+</script>
+</body>
+</html>
+
+

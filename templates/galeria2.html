@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+{%if table %}
+ {%for a in table %}
+  $( function() {
+    $( "#radius{{loop.index}}" ).selectmenu({
+      change: function( event, data ) {
+        alert('x');
+      }
+     });
+  } );
+ {%endfor%}
+{%endif%}   
+</script> 
+</head>
+<body>
+
+<h2>Galeria de productos fabricados en madera</h2>
+{%if table %}
+     {%for a in table %}
+            <td>
+            <div style="height: 300px;width: 300px;background-color: powderblue;">
+             <a href="{{a|replace('_thumbnail.jpg', '.jpg')}}"><img src="{{a}}" width="300" height="200"></a>
+                    <select  id="radius{{loop.index}}">
+                      <option value="50">50px</option>
+                      <option value="100">100px</option>
+                      <option value="150" selected="selected">150px</option>
+                      <option value="200">200px</option>
+                      <option value="250">250px</option>
+                    </select>
+                {{loop.index}}
+            </div>    
+            </td>
+     {%endfor%}
+</table>
+{%endif%} 
+
+
+
+</body>
+</html>
